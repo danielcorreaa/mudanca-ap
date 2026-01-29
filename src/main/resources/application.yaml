@@ -7,8 +7,8 @@ spring:
     mongodb:
       #authentication-database: admin
       #uri: mongodb://root:example@localhost:27017/mudanca?authSource=admin&authMechanism=SCRAM-SHA-256
-      #uri: mongodb+srv://danielaleixocorrea35_db_user:Ai32MKHqjVG0r0ZR@cluster0.q9xza8m.mongodb.net/mudanca?appName=Cluster0
-      uri: mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@cluster0.q9xza8m.mongodb.net/mudanca?appName=Cluster0
+      uri: mongodb+srv://danielaleixocorrea35_db_user:Ai32MKHqjVG0r0ZR@cluster0.q9xza8m.mongodb.net/mudanca?appName=Cluster0
+      #uri: mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@cluster0.q9xza8m.mongodb.net/mudanca?appName=Cluster0
       #uri: mongodb://root:example@localhost:27017/tech-challenge-orders?authSource=admin&replicaSet=myRepl
       #host: localhost
       # port: 27017
