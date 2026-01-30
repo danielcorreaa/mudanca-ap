@@ -18,4 +18,6 @@ public class ItemMudanca {
     private Double value;
     private String category; // "novo" ou "antigo"
     private Boolean completed;
+    private String userId;
+
 }
