@@ -2,16 +2,18 @@ package com.mudanca.controller;
 
 import com.mudanca.model.ItemMudanca;
 import com.mudanca.repository.ItemRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-// --- CONTROLADOR API (REST) ---
 @RestController
 @RequestMapping("/api/itens")
-@CrossOrigin(origins = "*") // Permite chamadas do seu site HTML
+@CrossOrigin(origins = "*")
+@Tag(name = "Itens de Mudança", description = "Gestão de itens e inventário para mudança")
 public class ItemController {
 
     private final ItemRepository repository;
@@ -24,21 +26,23 @@ public class ItemController {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-
+    @Operation(summary = "Listar itens do utilizador", description = "Retorna todos os itens pertencentes ao utilizador autenticado")
     @GetMapping
     public List<ItemMudanca> getAll() {
-        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userId = getAuthenticatedUserId();
         return repository.findByUserId(userId);
     }
 
+    @Operation(summary = "Criar item", description = "Adiciona um novo item à lista do utilizador")
     @PostMapping
     public ItemMudanca create(@RequestBody ItemMudanca item) {
-        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userId = getAuthenticatedUserId();
         item.setId(null);
         item.setUserId(userId);
         return repository.save(item);
     }
 
+    @Operation(summary = "Criar itens em lote", description = "Permite a criação de múltiplos itens de uma só vez")
     @PostMapping("/batch")
     public List<ItemMudanca> createBatch(@RequestBody List<ItemMudanca> itens) {
         String userId = getAuthenticatedUserId();
@@ -49,6 +53,7 @@ public class ItemController {
         return repository.saveAll(itens);
     }
 
+    @Operation(summary = "Atualizar item", description = "Modifica os dados de um item existente")
     @PutMapping("/{id}")
     public ItemMudanca update(@PathVariable String id, @RequestBody ItemMudanca item) {
         String userId = getAuthenticatedUserId();
@@ -62,6 +67,7 @@ public class ItemController {
                 .orElseThrow(() -> new RuntimeException("Item não encontrado ou acesso negado"));
     }
 
+    @Operation(summary = "Eliminar item", description = "Remove um item da lista")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         String userId = getAuthenticatedUserId();
@@ -72,7 +78,7 @@ public class ItemController {
         });
     }
 
-    // Endpoint para gerar a lista padrão para a Dani (ou qualquer utilizador logado)
+    @Operation(summary = "Setup inicial (Dani)", description = "Gera uma lista predefinida de itens essenciais para o utilizador")
     @PostMapping("/setup-dani")
     public List<ItemMudanca> setupDani() {
         String userId = getAuthenticatedUserId();
